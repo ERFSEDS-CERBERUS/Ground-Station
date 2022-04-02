@@ -122,3 +122,5 @@ def extract(mode="live"):
 
     # Return struct containing flight data and metadata
     return (data, mdata)
+
+# Test
