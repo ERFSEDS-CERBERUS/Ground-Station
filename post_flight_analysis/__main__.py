@@ -5,7 +5,7 @@ TODO: Docstring
 # Formatted with Black, the uncompromising Python code formatter.
 
 # Imports
-import graphlib
+# import graphlib
 import matplotlib.pyplot as plt
 
 import numpy as np
@@ -14,36 +14,36 @@ import core.integrate
 
 # import core.ang_vel
 import core.ISA_Altitude_gen
-import core.rotation
-import core.stitches
-import core.force_calc
-import core.impulse_calc
-import core.time_calc
+# import core.rotation
+# import core.stitches
+# import core.force_calc
+# import core.impulse_calc
+# import core.time_calc
 
 
 def main():
     # Imports data. This will return a stuct containing the data in SI units and any metadata
     base_data, mdata = core.data_in.extract(mode="from_file")
-    threshold = mdata["accel_range"]
-    m_i = mdata["m_i"]
-    m_f = mdata["m_f"]  
-    C_D = mdata["C_D"] 
-    A_f = mdata["A_f"]
-    burn_time = mdata["burn_time"]
+    # threshold = mdata["accel_range"]
+    # m_i = mdata["m_i"]
+    # m_f = mdata["m_f"]  
+    # C_D = mdata["C_D"] 
+    # A_f = mdata["A_f"]
+    # burn_time = mdata["burn_time"]
     # TODO: Add rest of metadata
 
 
     time = base_data[:, 0]
 
-    accel_low = np.vstack((base_data[:, 1], base_data[:, 2], base_data[:, 3]))
+    # accel_low = np.vstack((base_data[:, 1], base_data[:, 2], base_data[:, 3]))
     accel_high = np.vstack((base_data[:, 4], base_data[:, 5], base_data[:, 6]))
-    accel = core.stitches.stitch(time, accel_low, accel_high, threshold)
+    accel = accel_high
     accel_mag = [np.sqrt(accel[0][i]**2 + accel[1][i]**2 + accel[2][i]**2) for i,_ in enumerate(time)]
 
-    omega = np.vstack((base_data[:, 7], base_data[:, 8], base_data[:, 9]))
-    compass = np.vstack((base_data[:, 10], base_data[:, 11], base_data[:, 12]))
-    phi = np.asarray((core.integrate.left_sum(time,omega[0]),core.integrate.left_sum(time,omega[1]),core.integrate.left_sum(time,omega[2])))
-    phi_mag = [np.sqrt(phi[0][i]**2 + phi[1][i]**2 + phi[2][i]**2) for i,_ in enumerate(time)]
+    # omega = np.vstack((base_data[:, 7], base_data[:, 8], base_data[:, 9]))
+    # compass = np.vstack((base_data[:, 10], base_data[:, 11], base_data[:, 12]))
+    # phi = np.asarray((core.integrate.left_sum(time,omega[0]),core.integrate.left_sum(time,omega[1]),core.integrate.left_sum(time,omega[2])))
+    # phi_mag = [np.sqrt(phi[0][i]**2 + phi[1][i]**2 + phi[2][i]**2) for i,_ in enumerate(time)]
     pressure = base_data[:, 13]
 
     pressure_alt = core.ISA_Altitude_gen.ISA_altitude(pressure)
@@ -51,11 +51,11 @@ def main():
     # TODO: Calibrate angular position
 
     # Rotating vectors
-    accel = core.rotation.rotate(omega,time,accel)
+    # accel = core.rotation.rotate(omega,time,accel)
 
-    vel_x = core.integrate.left_sum(time, accel_low[0])
-    vel_y = core.integrate.left_sum(time, accel_low[1])
-    vel_z = core.integrate.left_sum(time, accel_low[2])
+    vel_x = core.integrate.left_sum(time, accel[0])
+    vel_y = core.integrate.left_sum(time, accel[1])
+    vel_z = core.integrate.left_sum(time, accel[2])
     vel = np.asarray([vel_x, vel_y, vel_z])
     vel_mag = [np.sqrt(vel[0][i]**2 + vel[1][i]**2 + vel[2][i]**2) for i,_ in enumerate(time)]
 
@@ -67,8 +67,8 @@ def main():
     pos_mag = [np.sqrt(pos[0][i]**2 + pos[1][i]**2 + pos[2][i]**2) for i,_ in enumerate(time)]
     alt_diff = [v-pressure_alt[i] for i,v in enumerate(pos_z)]
 
-    force = core.force_calc.calculate_force(time, accel, m_i, m_f, burn_time)
-    force_mag = [np.sqrt(force[0][i]**2 + force[1][i]**2 + force[2][i]**2) for i,_ in enumerate(time)]
+    # force = core.force_calc.calculate_force(time, accel, m_i, m_f, burn_time)
+    # force_mag = [np.sqrt(force[0][i]**2 + force[1][i]**2 + force[2][i]**2) for i,_ in enumerate(time)]
 
     # TODO: Calculate aero forces
 
@@ -128,28 +128,28 @@ def main():
     plt.title("Position, m")
 
     #Force (x, y, z w.r.t. t)
-    plt.subplot(3,3,8)
-    plt.plot(time,force[0])
-    plt.plot(time,force[1])
-    plt.plot(time,force[2])
-    plt.plot(time,force_mag)
-    plt.legend(["x","y","z","net"])
-    plt.title("Force, N")
+    # plt.subplot(3,3,8)
+    # plt.plot(time,force[0])
+    # plt.plot(time,force[1])
+    # plt.plot(time,force[2])
+    # plt.plot(time,force_mag)
+    # plt.legend(["x","y","z","net"])
+    # plt.title("Force, N")
 
     #Angle from Vertical (x,y,z w.r.t. t)
-    plt.subplot(3,3,6)
-    plt.plot(time,phi[0])
-    plt.plot(time,phi[1])
-    plt.plot(time,phi[2])
-    plt.legend(["x","y","z"])
-    plt.title("Vertical Angle, phi")
+    # plt.subplot(3,3,6)
+    # plt.plot(time,phi[0])
+    # plt.plot(time,phi[1])
+    # plt.plot(time,phi[2])
+    # plt.legend(["x","y","z"])
+    # plt.title("Vertical Angle, phi")
 
     # Table of Values goes here
     max_accel = np.around(np.max(accel_mag),decimals=3)
     max_accel_time = np.around(time[np.argmax(accel_mag)],decimals=3)
 
-    max_force = np.around(np.max(force_mag),decimals=3)
-    max_force_time = np.around(time[np.argmax(force_mag)],decimals=3)
+    # max_force = np.around(np.max(force_mag),decimals=3)
+    # max_force_time = np.around(time[np.argmax(force_mag)],decimals=3)
 
     max_vel = np.around(np.max(vel_mag),decimals=3)
     max_vel_time = np.around(time[np.argmax(vel_mag)],decimals=3)
@@ -160,8 +160,8 @@ def main():
     max_downrange = np.around(np.max(xy_pos),decimals=3)
     max_downrange_time = np.around(time[np.argmax(xy_pos)],decimals=3)
 
-    max_angle = np.around(np.max(phi_mag),decimals=3)
-    max_angle_time = np.around(time[np.argmax(phi_mag)],decimals=3)
+    # max_angle = np.around(np.max(phi_mag),decimals=3)
+    # max_angle_time = np.around(time[np.argmax(phi_mag)],decimals=3)
 
     #total_impulse = np.around(np.max(impulse),decimals=3)
     #total_impulse_time = np.around(time[np.argmax(impulse)],decimals=3)
@@ -169,7 +169,7 @@ def main():
 
     ax = plt.subplot(3,3,9)
     plt.title("Max Values")
-    data = [["Max Accel",str(max_accel)+" m/s^2",str(max_accel_time)+" s"],["Max Force",str(max_force)+" N",str(max_force_time)+" s"],["Max Velocity",str(max_vel)+" m/s",str(max_vel_time)+" s"],["Max Altitude",str(max_alt)+" m",str(max_alt_time)+" s"],["Max Downrange",str(max_downrange)+" m",str(max_downrange_time)+" s"],["Total Impulse","?????"+" N*s","?????"+" s"],["Max Angle",str(max_angle)+" rad",str(max_angle_time)+" s"]]
+    data = [["Max Accel",str(max_accel)+" m/s^2",str(max_accel_time)+" s"],["Max Force","N/A","N/A"],["Max Velocity",str(max_vel)+" m/s",str(max_vel_time)+" s"],["Max Altitude",str(max_alt)+" m",str(max_alt_time)+" s"],["Max Downrange",str(max_downrange)+" m",str(max_downrange_time)+" s"],["Total Impulse","?????"+" N*s","?????"+" s"],["Max Angle","N/A","N/A"]]
     ax.axis("tight")
     ax.axis("off")
     table = ax.table(cellText=data,loc="center")
