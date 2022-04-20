@@ -23,7 +23,7 @@ import core.time_calc
 
 def main():
     # Imports data. This will return a stuct containing the data in SI units and any metadata
-    base_data, mdata = core.data_in.extract(mode="from_file")
+    base_data, mdata = core.data_in.extract(mode="live")
     threshold = mdata["accel_range"]
     m_i = mdata["m_i"]
     m_f = mdata["m_f"]  
@@ -177,7 +177,88 @@ def main():
     table.set_fontsize(7)
     #Plot Formatting
     plt.tight_layout(pad = 0.5)
+    print("Displaying all plots...")
     plt.show()
+
+    if input("Display plots individually? (y/n) ").lower() == "y":
+        print("Displaying plots individually...")
+        print("Plot 1/9")
+        plt.plot(time,accel[0])
+        plt.plot(time,accel[1])
+        plt.plot(time,accel[2])
+        plt.plot(time,accel_mag)
+        plt.legend(["x","y","z","net"])
+        plt.title("Acceleration, m/s^2")
+        plt.show()
+
+        print("Plot 2/9")
+        plt.plot(time,pos_x)
+        plt.plot(time,pos_y)
+        plt.plot(time,xy_pos)
+        plt.legend(["x","y","net"])
+        plt.title("Down Range, m")
+        plt.show()
+
+        print("Plot 3/9")
+        plt.plot(time, alt_diff)
+        plt.legend(["diff"])
+        plt.title("pos_z - press. alt, m")
+        plt.show()
+
+        print("Plot 4/9")
+        plt.plot(time,vel_x)
+        plt.plot(time,vel_y)
+        plt.plot(time,vel_z)
+        plt.plot(time,vel_mag)
+        plt.legend(["x","y","z","net"])
+        plt.title("Velocity, m/s")
+        plt.show()
+
+        print("Plot 5/9")
+        plt.plot(time,pos_z)
+        plt.plot(time,pressure_alt)
+        plt.legend(["accel_alt, pressure_alt"])
+        plt.title("Altitude, m")
+        plt.show()
+
+        print("Plot 6/9")
+        plt.plot(time,pos_x)
+        plt.plot(time,pos_y)
+        plt.plot(time,pos_z)
+        plt.plot(time,xy_pos)
+        plt.legend(["x","y","z","net"])
+        plt.title("Position, m")
+        plt.show()
+
+        print("Plot 7/9")
+        plt.plot(time,force[0])
+        plt.plot(time,force[1])
+        plt.plot(time,force[2])
+        plt.plot(time,force_mag)
+        plt.legend(["x","y","z","net"])
+        plt.title("Force, N")
+        plt.show()
+
+        print("Plot 8/9")
+        plt.plot(time,phi[0])
+        plt.plot(time,phi[1])
+        plt.plot(time,phi[2])
+        plt.legend(["x","y","z"])
+        plt.title("Vertical Angle, phi")
+        plt.show()
+
+        print("Plot 9/9")
+        ax = plt.subplot(1,1,1)
+        plt.title("Max Values")
+        data = [["Max Accel",str(max_accel)+" m/s^2",str(max_accel_time)+" s"],["Max Force",str(max_force)+" N",str(max_force_time)+" s"],["Max Velocity",str(max_vel)+" m/s",str(max_vel_time)+" s"],["Max Altitude",str(max_alt)+" m",str(max_alt_time)+" s"],["Max Downrange",str(max_downrange)+" m",str(max_downrange_time)+" s"],["Total Impulse","?????"+" N*s","?????"+" s"],["Max Angle",str(max_angle)+" rad",str(max_angle_time)+" s"]]
+        ax.axis("tight")
+        ax.axis("off")
+        table = ax.table(cellText=data,loc="center")
+        table.auto_set_font_size(False)
+        table.set_fontsize(7)
+        plt.show()
+
+    
     return None
 
 
