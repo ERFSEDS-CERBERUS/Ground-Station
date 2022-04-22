@@ -1,8 +1,10 @@
 import numpy as np
 
+
 def calculate_mass(t, m_i, m_f, t_S, t_B):
-    mass = (((m_f-m_i)/(t_B-t_S))*(t-t_B))+m_i
+    mass = (((m_f - m_i) / (t_B - t_S)) * (t - t_B)) + m_i
     return mass
+
 
 def calculate_force(t, a, m_i, m_f, B, t_S=1):
     """
@@ -22,10 +24,10 @@ def calculate_force(t, a, m_i, m_f, B, t_S=1):
     print("Calculating force...")
 
     t_B = t_S + B
-    force_arr = np.array([np.zeros([len(t),1]),
-                             np.zeros([len(t),1]),
-                             np.zeros([len(t),1])])
-    temp_arr = np.zeros([len(t),1])
+    force_arr = np.array(
+        [np.zeros([len(t), 1]), np.zeros([len(t), 1]), np.zeros([len(t), 1])]
+    )
+    temp_arr = np.zeros([len(t), 1])
 
     for index in range(len(a[0])):
         x_accel_arr = a[0]
@@ -47,7 +49,7 @@ def calculate_force(t, a, m_i, m_f, B, t_S=1):
         mass = calculate_mass(t[index], m_i, m_f, t_S, t_B)
         temp_arr[index] = mass * z_accel
     force_arr[2] = temp_arr
-    
+
     print("Force calculation complete!")
 
     return force_arr

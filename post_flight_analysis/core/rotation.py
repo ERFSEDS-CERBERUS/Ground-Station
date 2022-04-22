@@ -89,15 +89,14 @@ def rotate(omega, step, R_frame, nose_axis="z"):
 
         # I was debugging the rotation logic. This works too but I think it is slower
 
-
-        in_frame = np.array([float(R_frame[0][n]),float(R_frame[1][n]),float(R_frame[2][n])])
+        in_frame = np.array(
+            [float(R_frame[0][n]), float(R_frame[1][n]), float(R_frame[2][n])]
+        )
         rot_vec = R.from_rotvec([omega[0][n], omega[1][n], omega[2][n]])
         in_frame = rot_vec.apply(in_frame)
         RR_x[n] = in_frame[0]
         RR_y[n] = in_frame[1]
         RR_z[n] = in_frame[2]
-
-
 
         """
         # Rotated vector
