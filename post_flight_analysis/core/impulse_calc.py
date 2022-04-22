@@ -4,6 +4,9 @@ from .time_calc import calc_accel_mag as calc_momentum_mag
 from .integrate import left_sum
 
 def calculate_impulse(mass_i, mass_f, vel_arr, ts_tb_arr, time_arr):
+
+    print("Calculating impulse...")
+
     t_S = ts_tb_arr[0]
     t_B = ts_tb_arr[1]
     t_S_index = 0
@@ -61,5 +64,7 @@ def calculate_impulse(mass_i, mass_f, vel_arr, ts_tb_arr, time_arr):
     impulse_arr = left_sum(adjusted_time_arr, momentum_mag_arr)
 
     impulse_total = [v * adjusted_time_arr[1]-adjusted_time_arr[0] for _,v in enumerate(impulse_arr)]
+
+    print("Impulse calculation complete!")
 
     return (impulse_arr, impulse_total)

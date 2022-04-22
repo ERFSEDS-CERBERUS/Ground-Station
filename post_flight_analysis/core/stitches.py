@@ -18,6 +18,9 @@ def stitch(time,low,high,threshold):
     # 1x3
     # row x col
     # n x 1
+
+    print("Beginning data stitching...")
+
     temp_arr = np.zeros([len(time),1])
     
     stitch_arr = np.array([np.zeros([len(time),1]),
@@ -59,5 +62,7 @@ def stitch(time,low,high,threshold):
             temp_arr[index]=low_z
 
     stitch_arr[2] = temp_arr
+    
+    print("Data stitching complete!")
     
     return stitch_arr

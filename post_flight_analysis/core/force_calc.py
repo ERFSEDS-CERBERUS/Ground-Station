@@ -18,6 +18,9 @@ def calculate_force(t, a, m_i, m_f, B, t_S=1):
     Raises:
         None
     """
+
+    print("Calculating force...")
+
     t_B = t_S + B
     force_arr = np.array([np.zeros([len(t),1]),
                              np.zeros([len(t),1]),
@@ -45,4 +48,6 @@ def calculate_force(t, a, m_i, m_f, B, t_S=1):
         temp_arr[index] = mass * z_accel
     force_arr[2] = temp_arr
     
+    print("Force calculation complete!")
+
     return force_arr

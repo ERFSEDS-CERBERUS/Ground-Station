@@ -31,6 +31,8 @@ def rotate(omega, step, R_frame, nose_axis="z"):
             Cause: nose_axis was set to something other than "z"
     """
 
+    print("Rotating coordinate frame...")
+
     # TODO: error checking inputs
 
     # TODO: implement nose axis selection. The program is written such that the nose points towards z
@@ -87,6 +89,7 @@ def rotate(omega, step, R_frame, nose_axis="z"):
 
         # I was debugging the rotation logic. This works too but I think it is slower
 
+
         in_frame = np.array([float(R_frame[0][n]),float(R_frame[1][n]),float(R_frame[2][n])])
         rot_vec = R.from_rotvec([omega[0][n], omega[1][n], omega[2][n]])
         in_frame = rot_vec.apply(in_frame)
@@ -104,5 +107,7 @@ def rotate(omega, step, R_frame, nose_axis="z"):
         RR_y[n] = rot_vec[1]
         RR_z[n] = rot_vec[2]
         """
+
+    print("Coordinate frame rotation complete!")
 
     return [RR_x, RR_y, RR_z]

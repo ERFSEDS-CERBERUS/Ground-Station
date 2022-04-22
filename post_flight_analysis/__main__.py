@@ -31,8 +31,7 @@ def main():
     A_f = mdata["A_f"]
     burn_time = mdata["burn_time"]
     # TODO: Add rest of metadata
-
-
+    
     time = base_data[:, 0]
 
     accel_low = np.vstack((base_data[:, 1], base_data[:, 2], base_data[:, 3]))
@@ -78,6 +77,8 @@ def main():
     # TODO: Calculate ISA and accel calculated altitude divergence
 
     # Plottting happens here:
+
+    print("Generating plots...")
 
     #Acceleration (x, y, x, mag w.r.t. t)
     plt.subplot(3,3,1)

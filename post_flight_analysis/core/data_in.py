@@ -174,7 +174,6 @@ def extract(mode="live"):
                     pressure_points = pressure_points + 1
             print("Using linear interpolation to match pressure to time array...")
             pressure = np.interp(time, pressure_time_raw, pressure_raw)
-            print(str(pressure))
             # TODO: Account for pressure callibration
             print("Note: If you are seeing this message it means that accounting for calibration has not been implemented")
             print("These pressure values are probably nonsense")
@@ -238,7 +237,7 @@ def extract(mode="live"):
             print("Closing JSON file...")
             f.close()
 
-            print("\n\n\nData input process complete! Returning data to main program...")
+            print("Data input process complete! Returning data to main program...\n\n\n")
 
             # t|axl|ayl|azl|axh|ayh|azh|wx|wy|wz|Ex|Ey|Ez|P |T
             # 0| 1 | 2 | 3 | 4 | 5 | 6 | 7| 8| 9|10|11|12|13|14

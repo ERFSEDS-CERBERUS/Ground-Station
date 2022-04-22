@@ -18,6 +18,8 @@ def left_sum(x,y):
         IndexError if x and y have different sizes
     """
 
+    print("Integrating data...")
+
     col_width = len(x)
     row_width = len(y)
     num_output = np.zeros([row_width,1])
@@ -35,6 +37,7 @@ def left_sum(x,y):
             num_sum = num_sum + (delta * y[n])
             num_output[n]= num_sum
         num_output[col_width - 1] = num_output[col_width - 2]
+        print("Data integration complete!")
         return num_output
     else:
         raise IndexError("Array sizes must match")
