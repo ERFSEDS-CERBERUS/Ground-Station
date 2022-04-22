@@ -196,14 +196,14 @@ def extract(mode="live"):
             high_G_points = 0
             for i, v in enumerate(data):
                 if list(v["data"].keys()) == ["HighGAccelerometerData"]:
-                    high_G_x_raw[high_G_points] = -v["data"]["HighGAccelerometerData"][
-                        "z"
+                    high_G_x_raw[high_G_points] = v["data"]["HighGAccelerometerData"][
+                        "x"
                     ]
                     high_G_y_raw[high_G_points] = v["data"]["HighGAccelerometerData"][
                         "y"
                     ]
                     high_G_z_raw[high_G_points] = v["data"]["HighGAccelerometerData"][
-                        "x"
+                        "z"
                     ]
                     high_G_time_raw[high_G_points] = time_raw[i]
                     high_G_points = high_G_points + 1
@@ -328,9 +328,9 @@ def extract(mode="live"):
             gyro_points = 0
             for i, v in enumerate(data):
                 if list(v["data"].keys()) == ["GyroData"]:
-                    gyro_x_raw[gyro_points] = -v["data"]["GyroData"]["z"] * np.pi / 180
+                    gyro_x_raw[gyro_points] = v["data"]["GyroData"]["x"] * np.pi / 180
                     gyro_y_raw[gyro_points] = v["data"]["GyroData"]["y"] * np.pi / 180
-                    gyro_z_raw[gyro_points] = v["data"]["GyroData"]["x"] * np.pi / 180
+                    gyro_z_raw[gyro_points] = v["data"]["GyroData"]["z"] * np.pi / 180
                     gyro_time_raw[gyro_points] = time_raw[i]
                     gyro_points = gyro_points + 1
             print("Using linear interpolation to match gyro data to time array...")
@@ -347,28 +347,117 @@ def extract(mode="live"):
             print("Closing JSON file...")
             f.close()
 
-            print(
-                "Data input process complete! Returning data to main program...\n\n\n"
-            )
 
             # t|axl|ayl|azl|axh|ayh|azh|wx|wy|wz|Ex|Ey|Ez|P |T
             # 0| 1 | 2 | 3 | 4 | 5 | 6 | 7| 8| 9|10|11|12|13|14
 
+            nose_axis = "+x"
+
             data_out = np.zeros((len(time), 15))
             for i, v in enumerate(time):
-                data_out[i, 0] = v
-                data_out[i, 1] = low_G_x[i]
-                data_out[i, 2] = low_G_y[i]
-                data_out[i, 3] = low_G_z[i]
-                data_out[i, 4] = high_G_x[i]
-                data_out[i, 5] = high_G_y[i]
-                data_out[i, 6] = high_G_z[i]
-                data_out[i, 7] = gyro_x[i]
-                data_out[i, 8] = gyro_y[i]
-                data_out[i, 9] = gyro_z[i]
-                data_out[i, 10] = magno_x[i]
-                data_out[i, 11] = magno_y[i]
-                data_out[i, 12] = magno_z[i]
+                match nose_axis:
+                    case "+x":
+                        # x = y
+                        # y = z
+                        # z = x 
+                        data_out[i, 0] = v
+                        data_out[i, 1] = low_G_y[i]
+                        data_out[i, 2] = low_G_z[i]
+                        data_out[i, 3] = low_G_x[i]
+                        data_out[i, 4] = high_G_y[i]
+                        data_out[i, 5] = high_G_z[i]
+                        data_out[i, 6] = high_G_x[i]
+                        data_out[i, 7] = gyro_y[i]
+                        data_out[i, 8] = gyro_z[i]
+                        data_out[i, 9] = gyro_x[i]
+                        data_out[i, 10] = magno_y[i]
+                        data_out[i, 11] = magno_z[i]
+                        data_out[i, 12] = magno_x[i]
+                    case "+y":
+                        # x = -x
+                        # y = z
+                        # z = y
+                        data_out[i, 0] = v
+                        data_out[i, 1] = -low_G_x[i]
+                        data_out[i, 2] = low_G_z[i]
+                        data_out[i, 3] = low_G_y[i]
+                        data_out[i, 4] = -high_G_x[i]
+                        data_out[i, 5] = high_G_z[i]
+                        data_out[i, 6] = high_G_y[i]
+                        data_out[i, 7] = -gyro_x[i]
+                        data_out[i, 8] = gyro_z[i]
+                        data_out[i, 9] = gyro_y[i]
+                        data_out[i, 10] = -magno_x[i]
+                        data_out[i, 11] = magno_z[i]
+                        data_out[i, 12] = magno_y[i]
+                    case "+z":
+                        # x = x
+                        # y = y
+                        # z = z
+                        data_out[i, 0] = v
+                        data_out[i, 1] = low_G_x[i]
+                        data_out[i, 2] = low_G_y[i]
+                        data_out[i, 3] = low_G_z[i]
+                        data_out[i, 4] = high_G_x[i]
+                        data_out[i, 5] = high_G_y[i]
+                        data_out[i, 6] = high_G_z[i]
+                        data_out[i, 7] = gyro_x[i]
+                        data_out[i, 8] = gyro_y[i]
+                        data_out[i, 9] = gyro_z[i]
+                        data_out[i, 10] = magno_x[i]
+                        data_out[i, 11] = magno_y[i]
+                        data_out[i, 12] = magno_z[i]
+                    case "-x":
+                        # x = -y
+                        # y = z
+                        # z = -x
+                        data_out[i, 0] = v
+                        data_out[i, 1] = -low_G_y[i]
+                        data_out[i, 2] = low_G_z[i]
+                        data_out[i, 3] = -low_G_x[i]
+                        data_out[i, 4] = -high_G_y[i]
+                        data_out[i, 5] = high_G_z[i]
+                        data_out[i, 6] = -high_G_x[i]
+                        data_out[i, 7] = -gyro_y[i]
+                        data_out[i, 8] = gyro_z[i]
+                        data_out[i, 9] = -gyro_x[i]
+                        data_out[i, 10] = -magno_y[i]
+                        data_out[i, 11] = magno_z[i]
+                        data_out[i, 12] = -magno_x[i]
+                    case "-y":
+                        # x = x
+                        # y = z
+                        # z = -y
+                        data_out[i, 0] = v
+                        data_out[i, 1] = low_G_x[i]
+                        data_out[i, 2] = low_G_z[i]
+                        data_out[i, 3] = -low_G_y[i]
+                        data_out[i, 4] = high_G_x[i]
+                        data_out[i, 5] = high_G_z[i]
+                        data_out[i, 6] = -high_G_y[i]
+                        data_out[i, 7] = gyro_x[i]
+                        data_out[i, 8] = gyro_z[i]
+                        data_out[i, 9] = -gyro_y[i]
+                        data_out[i, 10] = magno_x[i]
+                        data_out[i, 11] = magno_z[i]
+                        data_out[i, 12] = -magno_y[i]
+                    case "-z":
+                        # x = x
+                        # y = -y
+                        # z = -z
+                        data_out[i, 0] = v
+                        data_out[i, 1] = low_G_x[i]
+                        data_out[i, 2] = -low_G_y[i]
+                        data_out[i, 3] = -low_G_z[i]
+                        data_out[i, 4] = high_G_x[i]
+                        data_out[i, 5] = -high_G_y[i]
+                        data_out[i, 6] = -high_G_z[i]
+                        data_out[i, 7] = gyro_x[i]
+                        data_out[i, 8] = -gyro_y[i]
+                        data_out[i, 9] = -gyro_z[i]
+                        data_out[i, 10] = magno_x[i]
+                        data_out[i, 11] = -magno_y[i]
+                        data_out[i, 12] = -magno_z[i]
                 data_out[i, 13] = pressure[i]
                 data_out[i, 14] = temperature[i]
             print("Meta data has not been configured!")
@@ -380,6 +469,10 @@ def extract(mode="live"):
                 "burn_time": 1,
                 "accel_range": 9999,
             }
+
+            print(
+                "Data input process complete! Returning data to main program...\n\n\n"
+            )
 
             return (data_out, meta_out)
             """

@@ -2,7 +2,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation as R
 
 
-def rotate(omega, step, R_frame, nose_axis="z"):
+def rotate(omega, step, R_frame):
     """
     Expresses R_frame in terms of an inertial frame based on an angular velocity vector.
     Parameters:
@@ -32,23 +32,6 @@ def rotate(omega, step, R_frame, nose_axis="z"):
     """
 
     print("Rotating coordinate frame...")
-
-    # TODO: error checking inputs
-
-    # TODO: implement nose axis selection. The program is written such that the nose points towards z
-    # For other axes, change the vectors so that z points towards the nose, perform the calculations,
-    # then change back to the original orientation.
-    match nose_axis:
-        case "x":
-            raise NotImplementedError(
-                "Nose axis selection has not been implemented. Only supports z oriented nose"
-            )
-        case "y":
-            raise NotImplementedError(
-                "Nose axis selection has not been implemented. Only supports z oriented nose"
-            )
-        case "z":
-            pass
 
     out_frame = np.zeros((len(step),))
     RR_x = np.zeros((len(step),))

@@ -5,7 +5,6 @@ TODO: Docstring
 # Formatted with Black, the uncompromising Python code formatter.
 
 # Imports
-import graphlib
 import matplotlib.pyplot as plt
 
 import numpy as np
