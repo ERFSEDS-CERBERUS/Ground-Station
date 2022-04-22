@@ -54,7 +54,7 @@ def extract(mode="live"):
             print("Determing timestamp of each data point...")
             time_raw = np.zeros((len(data)),)
             flight_time = 0
-            tps = 1024
+            tps = 1/0.00089
             max_tps = tps
             for i,v in enumerate(data):
                 flight_time = flight_time + (v['ticks_since_last_message'] / tps)
@@ -119,9 +119,9 @@ def extract(mode="live"):
             high_G_points = 0
             for i,v in enumerate(data):
                 if list(v['data'].keys()) == ['HighGAccelerometerData']:
-                    high_G_x_raw[high_G_points] = v['data']['HighGAccelerometerData']['x']
+                    high_G_x_raw[high_G_points] = -v['data']['HighGAccelerometerData']['z']
                     high_G_y_raw[high_G_points] = v['data']['HighGAccelerometerData']['y']
-                    high_G_z_raw[high_G_points] = v['data']['HighGAccelerometerData']['z']
+                    high_G_z_raw[high_G_points] = v['data']['HighGAccelerometerData']['x']
                     high_G_time_raw[high_G_points] = time_raw[i]
                     high_G_points = high_G_points + 1
             print("Using linear interpolation to match high G to time array...")
@@ -217,9 +217,9 @@ def extract(mode="live"):
             gyro_points = 0
             for i,v in enumerate(data):
                 if list(v['data'].keys()) == ['GyroData']:
-                    gyro_x_raw[gyro_points] = v['data']['GyroData']['x']
-                    gyro_y_raw[gyro_points] = v['data']['GyroData']['y']
-                    gyro_z_raw[gyro_points] = v['data']['GyroData']['z']
+                    gyro_x_raw[gyro_points] = -v['data']['GyroData']['z'] * np.pi/180
+                    gyro_y_raw[gyro_points] = v['data']['GyroData']['y'] * np.pi/180
+                    gyro_z_raw[gyro_points] = v['data']['GyroData']['x'] * np.pi/180
                     gyro_time_raw[gyro_points] = time_raw[i]
                     gyro_points = gyro_points + 1
             print("Using linear interpolation to match gyro data to time array...")

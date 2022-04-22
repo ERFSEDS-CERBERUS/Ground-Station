@@ -1,7 +1,7 @@
 import numpy as np
-from force_calc import calculate_mass
-from time_calc import calc_accel_mag as calc_momentum_mag
-from integrate import left_sum
+from .force_calc import calculate_mass
+from .time_calc import calc_accel_mag as calc_momentum_mag
+from .integrate import left_sum
 
 def calculate_impulse(mass_i, mass_f, vel_arr, ts_tb_arr, time_arr):
     t_S = ts_tb_arr[0]

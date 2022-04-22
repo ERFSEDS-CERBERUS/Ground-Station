@@ -48,6 +48,7 @@ def rotate(omega, step, R_frame, nose_axis="z"):
         case "z":
             pass
 
+    out_frame = np.zeros((len(step),))
     RR_x = np.zeros((len(step),))
     RR_y = np.zeros((len(step),))
     RR_z = np.zeros((len(step),))
@@ -57,6 +58,7 @@ def rotate(omega, step, R_frame, nose_axis="z"):
     # These are not really Euler angles (unless it's a special case where they happen to be)
     for n, s in enumerate(step):
 
+        """
         alpha = omega[0][n] * delta_t
         beta = omega[1][n] * delta_t
         gamma = omega[2][n] * delta_t
@@ -81,12 +83,26 @@ def rotate(omega, step, R_frame, nose_axis="z"):
 
         # quat = R.as_quat()
 
+        """
+
+        # I was debugging the rotation logic. This works too but I think it is slower
+
+        in_frame = np.array([float(R_frame[0][n]),float(R_frame[1][n]),float(R_frame[2][n])])
+        rot_vec = R.from_rotvec([omega[0][n], omega[1][n], omega[2][n]])
+        in_frame = rot_vec.apply(in_frame)
+        RR_x[n] = in_frame[0]
+        RR_y[n] = in_frame[1]
+        RR_z[n] = in_frame[2]
+
+
+
+        """
         # Rotated vector
         raw_vec = [R_frame[0][n], R_frame[1][n], R_frame[2][n]]
-        rot_vec = np.matmul(Q, raw_vec)
-
+        rot_vec = np.matmul(np.transpose(Q), raw_vec)
         RR_x[n] = rot_vec[0]
         RR_y[n] = rot_vec[1]
         RR_z[n] = rot_vec[2]
+        """
 
     return [RR_x, RR_y, RR_z]
