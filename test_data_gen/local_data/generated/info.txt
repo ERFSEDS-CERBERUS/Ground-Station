@@ -1,0 +1,2 @@
+This is where generated inertial test data goes.
+Generated test data is stored in csv files.

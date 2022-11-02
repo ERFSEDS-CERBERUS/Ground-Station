@@ -1,0 +1,10 @@
+**/__pycache__/
+**.wpr
+**/local_data/**/*.json
+**/local_data/**/*.csv
+
+**.*log
+**/docs/**/*.aux
+**/docs/**/*.gz
+**.code-workspace
+

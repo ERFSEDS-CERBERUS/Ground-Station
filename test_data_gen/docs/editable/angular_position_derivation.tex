@@ -1,0 +1,125 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx} 
+\usepackage{gensymb}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\title{Derivation of Angular Position\\ \large for the NOVA flight computer data generation suite}
+\author{Paul Conway}
+
+\begin{document}
+\noindent
+% Title page
+\maketitle
+
+% Purpose/description
+\bigskip
+\begin{center}
+\large Purpose
+\end{center}
+The purpose of this document is to explain the derivation of inertial angular position throughout the flight path relative to the launch site.
+\pagebreak
+
+
+% Defining what different symbols mean
+\begin{center}
+\large Symbols and Definitions
+\end{center}
+\begin{enumerate}
+\item $t \triangleq$ time
+\item $\theta _{a} \triangleq$ angular position around the $a$ axis
+\item $\vec{\omega} \triangleq$ angular velocity
+\item $\vec{r} \triangleq$ position vector from the origin
+\item $\vec{v} \triangleq$ velocity vector from the origin
+\item $a_{0} \triangleq$ the initial value of $a$
+\end{enumerate}
+\pagebreak
+
+
+% Derivation
+% Finding delta theta
+\begin{center}
+\large Derivation
+\end{center}
+First, let's begin with the basic definiton of $\omega$:
+\begin{center}
+\scalebox{1.25}{$\omega = \frac{\Delta \theta}{\Delta t}$}
+\end{center}
+Which we can solve for $\Delta \theta$:
+\begin{center}
+\scalebox{1.25}{$\Delta \theta = \omega \Delta t$}
+\end{center}
+If we write each $\Delta$ term as the difference between its start and end:
+\begin{center}
+\scalebox{1.25}{$\theta - \theta_{0} = \omega (t - t_{0})$}
+\end{center}
+Which we can solve for $\theta$:
+\begin{center}
+\scalebox{1.25}{$\theta = \theta _{0} + \omega (t - t_{0})$}
+\end{center}
+
+% Finding components of omega
+\noindent Now we must find $\omega$. In 3D space, $\omega$ is found as such:
+\begin{center}
+\scalebox{1.25}{$\vec{\omega} = \frac{\vec{r} \times \vec{v}}{|\vec{r}|^2}$}
+\end{center}
+We can solve for the numerator as such:
+\begin{center}
+\scalebox{1.25}{$\begin{vmatrix}
+\vec{i} & \vec{j} & \vec{k} \\
+r_{x} & r_{y} & r_{z} \\
+v_{x} & v_{y} & v_{z}
+\end{vmatrix} = $}
+\\ \bigskip
+\scalebox{1.25}{$(r_{y}v_{z} - r_{z}v_{y})\vec{i} + 
+(r_{z}v_{x} - r_{x}v_{z})\vec{j} + 
+(r_{x}v_{y} - r_{y}v_{x})\vec{k}$}
+\end{center}
+We can solve for the denominator as such:
+\begin{center}
+\scalebox{1.25}{$|\vec{r}|^{2} = r_{x}^{2} + r_{y}^{2} + r_{z}^{2}$}
+\end{center}
+Thus our components for $\vec{\omega}$ are:
+\begin{center}
+\scalebox{1.25}{$\omega _{x} = \frac{r_{y}v_{z} - r_{z}v_{y}}{r_{x}^{2} + r_{y}^{2} + r_{z}^{2}}$} \\
+\vspace{0.2cm}
+\scalebox{1.25}{$\omega _{y} = \frac{r_{z}v_{x} - r_{x}v_{z}}{r_{x}^{2} + r_{y}^{2} + r_{z}^{2}}$} \\
+\vspace{0.2cm}
+\scalebox{1.25}{$\omega _{z} = \frac{r_{x}v_{y} - r_{y}v_{x}}{r_{x}^{2} + r_{y}^{2} + r_{z}^{2}}$}
+\end{center}
+\pagebreak
+It is important to remember that angular position is not a vector in cartesian space. We must express rotation about each axis separately keeping in mind that all rotations are happening simulateously. Thus, our angular position about each axis is:
+\begin{center}
+\scalebox{1.25}{$\theta _ {x} = \theta _{0x} + \frac{r_{y}v_{z} - r_{z}v_{y}}{r_{x}^{2} + r_{y}^{2} + r_{z}^{2}}(t - t_{0})$} \\
+\vspace{0.2cm}
+\scalebox{1.25}{$\theta _ {y} = \theta _{0y} + \frac{r_{z}v_{x} - r_{x}v_{z}}{r_{x}^{2} + r_{y}^{2} + r_{z}^{2}}(t - t_{0})$} \\
+\vspace{0.2cm}
+\scalebox{1.25}{$\theta _ {z} = \theta _{0z} + \frac{r_{x}v_{y} - r_{y}v_{x}}{r_{x}^{2} + r_{y}^{2} + r_{z}^{2}}(t - t_{0})$}
+\end{center}
+\pagebreak
+
+% Implementation
+\begin{center}
+Implementation
+\end{center}
+The above derivation only applied when $\vec{\omega}$ is constant in both magnitude and direction. However, this assumption is not true for the flights unless they are following a perfectly circular path. To understand how we calculate $\vec{\omega}$ that is changing over time, we can look at a similar defintion of $\omega$:
+\begin{center}
+\scalebox{1.25}{$\omega = \frac{d\theta}{dt}$}
+\end{center}
+It is important to remember what this notation actually means. Here, we are saying that $\omega$ is equal to the change in angle over the change in time for some infinitesimally small time interval. In other words, we are saying that theta is proportional to time for small intervals of time. Ie:
+\begin{center}
+\scalebox{1.25}{$\theta \propto t$, if $t \approx 0$}
+\end{center}
+If we define the constant of proportionality to be $\omega$:
+\begin{center}
+\scalebox{1.25}{$\theta = \omega t$, if $t \approx 0$}
+\end{center}
+Since the values of $t$ that we are working with are very small (in the order of $10^{-4}$ or even smaller), we can assume they are sufficiently small such that the condition that $t \approx 0$ is satisfied. However, we have only solved the problem of calculating $\theta$ during some small time interval. If we wish to calculate $\theta$ for the entire flight, we must evaluate our expressions for $\theta$ for each time interval. We can express this as a summation:
+\begin{center}
+\scalebox{1.25}{$\theta_{x_{m}} = \sum\limits_{n=1}^m \theta _{x_{n-1}} + \frac{r_{y_{n}}v_{z_{n}} - r_{z_{n}}v_{y_{n}}}{r_{x_{n}}^{2} + r_{y_{n}}^{2} + r_{z_{n}}^{2}}(t_{n} - t_{n-1})$}
+\end{center}
+The equivelant expressions for $\theta _{y_{k}}$ and $\theta _{z_{k}}$ are similar but use their respective value for $\omega$.
+\bigskip
+\\When coding the above logic, you will calculate the value for $\theta$ for a given interval and add it to the previous value for $\theta$. An initial value for $\theta$ will have to be assumed, which will likely be $0$.
+\end{document}
